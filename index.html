@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0a10">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Альфрэд Еникеев — графический и UI-дизайнер. Интерфейсы, наружная реклама, 3D и графика для брендов.">
   <title>Альфрэд Еникеев&nbsp;— графический и&nbsp;UI-дизайнер</title>
   <link rel="icon" href="media/monogram.svg" type="image/svg+xml">
@@ -33,15 +34,15 @@
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
+      <div class="light-field" aria-hidden="true">
+        <picture class="light-still">
+          <source media="(max-width: 680px)" srcset="media/ribbon-mobile.webp">
+          <img src="media/ribbon.webp" alt="">
+        </picture>
+        <canvas class="light-canvas"></canvas>
+      </div>
       <div class="wrap">
         <div class="hero-scene">
-          <div class="light-field" aria-hidden="true">
-            <picture class="light-still">
-              <source media="(max-width: 680px)" srcset="media/ribbon-mobile.webp">
-              <img src="media/ribbon.webp" alt="">
-            </picture>
-            <canvas class="light-canvas"></canvas>
-          </div>
           <div class="hero-copy">
             <h1 id="hero-title">Привет.</h1>
             <p>Я&nbsp;Альфрэд. Делаю графику<br>и&nbsp;проектирую интерфейсы.</p>
@@ -60,7 +61,7 @@
           </div>
         </div>
         <div class="hero-foot">
-          <span>Графический и&nbsp;UI-дизайнер</span>
+          <span lang="en">Graphic &amp; UX/UI Designer</span>
           <span class="hero-foot-right">
             <span>Открыт к&nbsp;работе</span>
             <button class="light-toggle" type="button" aria-label="Пауза анимации фона" aria-pressed="false" title="Приостановить анимацию фона" hidden>
@@ -101,13 +102,13 @@
       </article>
 
       <div class="work-pair">
-        <article class="project" id="denta">
-          <a class="project-art denta-art" href="#case-denta" data-case="denta" aria-label="Открыть кейс «Дента Лайф»">
-            <img src="media/denta-cover.webp" width="1440" height="944" loading="lazy" alt="Первый экран лендинга «Дента Лайф» с формой записи">
+        <article class="project" id="350z">
+          <a class="project-art uncovered-art" href="350z/index.html" aria-label="Открыть 3D-премьеру Nissan 350Z">
+            <img src="media/350z-uncovered.jpg" width="952" height="550" loading="lazy" alt="Зелёный Nissan 350Z в тёмном гараже">
           </a>
-          <div class="project-title"><h3>Дента Лайф</h3><span class="index" aria-hidden="true">02</span></div>
-          <p>Веб-дизайн / Концепт</p>
-          <a class="text-action" href="#case-denta" data-case="denta">Смотреть кейс <svg class="icon" aria-hidden="true"><use href="#up-right"/></svg></a>
+          <div class="project-title"><h3>Nissan 350Z — Uncovered</h3><span class="index" aria-hidden="true">02</span></div>
+          <p>Интерактивный веб-концепт / 3D и&nbsp;моушн</p>
+          <a class="text-action" href="350z/index.html">Открыть 3D-премьеру <svg class="icon" aria-hidden="true"><use href="#up-right"/></svg></a>
         </article>
         <article class="project" id="quarters">
           <a class="project-art app-art" href="#case-quarters" data-case="quarters" aria-label="Открыть кейс «Тихие кварталы»">
@@ -282,19 +283,6 @@
       <div class="dialog-content"></div>
     </div>
   </dialog>
-
-  <template id="case-denta">
-    <p class="case-kicker">02 / Веб-дизайн / Концепт</p>
-    <h2 id="case-title">Дента Лайф</h2>
-    <p class="case-lede">Лендинг стоматологической клиники, где человек может понять стоимость лечения и&nbsp;записаться на&nbsp;приём с&nbsp;первого экрана.</p>
-    <dl class="case-facts">
-      <div><dt>Задача</dt><dd>Показать предложение по&nbsp;лечению кариеса и&nbsp;упростить запись.</dd></div>
-      <div><dt>Мой вклад</dt><dd>Структура лендинга, визуальный дизайн и&nbsp;набор компонентов в&nbsp;Figma.</dd></div>
-      <div><dt>Решение</dt><dd>Форма рядом с&nbsp;ценой, затем информация о&nbsp;клинике и&nbsp;карточки услуг.</dd></div>
-    </dl>
-    <figure><img src="media/denta-cover.webp" width="1440" height="944" alt="Первый экран «Дента Лайф»"><figcaption>Первый экран с&nbsp;ценой, условиями и&nbsp;формой записи.</figcaption></figure>
-    <figure><img src="media/denta-services.webp" width="1440" height="1438" loading="lazy" alt="Каталог стоматологических услуг и запись на консультацию"><figcaption>Каталог услуг с&nbsp;ценами и&nbsp;отдельным предложением консультации. Данные в&nbsp;макете условные.</figcaption></figure>
-  </template>
 
   <template id="case-piermont">
     <p class="case-kicker">01 / Наружная реклама / Marten</p>
