@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Nissan 350Z — Uncovered / Альфрэд Еникеев</title>
+  <link rel="icon" href="../media/monogram.svg" type="image/svg+xml">
+  <script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
+  <script type="module" src="./studio.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    :root{font-family:"Segoe UI",Arial,sans-serif;color:#f1eee9;background:#141517;--margin:clamp(1rem,4.25vw,4.7rem);--line:#e3dfd34a;--cream:#f3eee6}
+    body{margin:0}
+    [hidden]{display:none!important}
+    a{color:inherit;text-underline-offset:.2em}
+    .sequence{height:100svh;min-height:380px;position:relative}
+    .sequence[data-started]{height:320svh;min-height:1140px}
+    .sequence[data-ready]:not([data-started]) + .story{display:none}
+    .stage{position:sticky;top:0;height:100svh;min-height:380px;overflow:hidden;isolation:isolate;background:#101012}
+    .surface,.poster,.shade{position:absolute;inset:0;width:100%;height:100%}
+    .poster{object-fit:cover;filter:brightness(.56) saturate(.68)}
+    .stage[data-live] .poster{visibility:hidden}
+    .surface{touch-action:pan-y;cursor:pointer;outline-offset:-3px}
+    .stage[data-open] .surface{cursor:grab}
+    .surface[data-preview]{cursor:crosshair}
+    .surface[data-dragging]{cursor:grabbing}
+    .surface canvas{display:block;width:100%;height:100%}
+    .shade{pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 27%,#05050749 67%,#020203e0),linear-gradient(#06060874,transparent 28%,transparent 68%,#050507a3)}
+    .stage[data-title] .shade{background:radial-gradient(ellipse at 54% 48%,transparent 36%,#05050740 74%,#040406a3),linear-gradient(#07070961,transparent 24%,transparent 70%,#0707098f)}
+    .frame{position:absolute;inset:clamp(.4rem,1.45vw,1.5rem);border:1px solid #e3dfd34a;border-radius:clamp(.8rem,1.75vw,1.55rem);pointer-events:none}
+    .stage-header,.stage-controls{position:absolute;left:var(--margin);right:var(--margin);display:flex;justify-content:space-between;align-items:center;gap:.75rem}
+    .stage .header-right,.stage .stage-controls,.stage .chapter-nav,.stage .signature,.stage .frame{visibility:hidden;opacity:0;transition:opacity .42s ease}
+    .stage[data-title] .header-right,.stage[data-title] .stage-controls,.stage[data-title] .chapter-nav,.stage[data-title] .signature,.stage[data-title] .frame{visibility:visible;opacity:1}
+    .stage-header{top:clamp(.7rem,2.5svh,1.8rem);height:clamp(2.4rem,7svh,4.7rem);font-size:.76rem;color:#e7e3da;pointer-events:none}
+    .stage-header a,.header-right{pointer-events:auto}
+    .stage-header a{text-decoration:none;padding:.55rem 0}
+    .stage-header a:hover,.chapter-nav button:hover{color:white}
+    .case-back{font-size:.84rem;font-weight:650}
+    .header-right{display:flex;align-items:center;gap:clamp(.7rem,2.3vw,2.5rem)}
+    h1,h2,p{margin:0}
+    .wordmark{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none}
+    .signature{
+      position:absolute;
+      top:min(calc(50% + 15.5vw),calc(100% - clamp(6.8rem,18svh,10rem)));
+      right:21%;
+      font:italic 400 clamp(3.35rem,min(9.2vw,17svh),10.75rem)/.85 "Times New Roman",serif;
+      letter-spacing:-.058em;white-space:nowrap;color:var(--cream);text-shadow:0 .025em .19em #0008;pointer-events:none;
+    }
+    .stage[data-title]:not([data-chapter="0"]) .signature{opacity:0;visibility:hidden}
+    .stage-controls{bottom:clamp(2rem,5.9svh,4.6rem);align-items:end}
+    .stage-copy{max-width:min(45vw,22rem)}
+    h2{font-size:clamp(1.28rem,2.75vw,2.65rem);line-height:1;letter-spacing:-.05em}
+    .help{margin:.55rem 0 1.05rem;font-size:.82rem;line-height:1.4;color:#e5e0d7}
+    .orbit,.controls{display:flex;gap:.3rem;align-items:center}
+    button{min-width:2.65rem;min-height:2.65rem;font:inherit;color:#f1eee9;border:1px solid var(--line);background:#151719ae;cursor:pointer;border-radius:100px}
+    .reveal{background:var(--cream);color:#161617;border-color:var(--cream);font-size:.83rem;font-weight:650;padding:0 1.25rem}
+    .reveal:hover{background:#fff}
+    button[data-home]{font-size:.7rem}
+    button:hover{border-color:var(--cream)}
+    :focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+    .chapter-nav{position:absolute;right:var(--margin);top:48%;display:grid;gap:.3rem;text-align:right}
+    .chapter-nav button{display:flex;align-items:center;justify-content:end;gap:.48rem;background:none;border:0;border-radius:0;font-size:.65rem;letter-spacing:.08em;color:#d1ccc5;min-height:2.1rem;padding:0}
+    .chapter-nav button::after{content:"";width:.9rem;height:1px;background:currentColor;transition:width .25s ease}
+    .chapter-nav button[aria-current="step"]{color:#fff}
+    .chapter-nav button[aria-current="step"]::after{width:1.85rem}
+    .sound{position:relative;z-index:2}
+    .sound-bar{display:flex;justify-content:flex-end;gap:.3rem}
+    .sound button{padding:0 .65rem;font-size:.75rem}
+    #sound-toggle[aria-pressed=true]{color:#fff;background:#41403cab}
+    #sound-options{min-width:2.65rem;font-size:1rem}
+    .sound-panel{position:absolute;right:0;top:calc(100% + .4rem);width:min(300px,calc(100vw - 2 * var(--margin)));padding:.8rem;background:#151719f5;border:1px solid var(--line);border-radius:.8rem}
+    .sound-title{font-size:.82rem;font-weight:bold}
+    .sound-links{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;font-size:.75rem;color:#bdcaca}
+    .sound-links a{padding:.35rem 0}
+    #sound-status{color:#bdcaca;font-size:.75rem;margin:.35rem 0;line-height:1.4}
+    .story{padding:clamp(3.5rem,9vw,8rem) var(--margin);background:#18191b;color:#f1eee9}
+    .story-inner{max-width:76rem;margin:auto}
+    .story-lead{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,5vw,5rem);align-items:start}
+    .story h2{font:italic 400 clamp(3.5rem,9vw,8.5rem)/.89 "Times New Roman",serif;letter-spacing:-.07em}
+    .story-copy{font-size:clamp(1rem,1.5vw,1.22rem);line-height:1.56;color:#c8d2ce;max-width:42ch}
+    .story-copy p+p{margin-top:1em}
+    .car-history{margin-top:clamp(3rem,8vw,7rem);padding-top:clamp(2.1rem,5vw,4.25rem);border-top:1px solid var(--line)}
+    .story .case-credit{font-size:.84rem;color:#aabbb4}
+    .case-return{display:inline-block;margin-top:clamp(2.1rem,5vw,4.25rem);font-size:.9rem;font-weight:650}
+    .specs{display:grid;grid-template-columns:repeat(4,1fr);margin:clamp(2rem,6vw,5rem) 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .specs div{padding:1.15rem .55rem 1.25rem 0;display:flex;flex-direction:column;gap:.45rem}
+    .specs dt,.source{font-size:.81rem;color:#aabbb4}
+    .specs dd{margin:0;font-size:clamp(1.35rem,3.4vw,2.95rem);line-height:1.05;letter-spacing:-.04em}
+    .source{margin-top:1rem;line-height:1.5}
+    @media(max-width:700px){
+      .stage-header{top:1.05rem}
+      .stage-header .history-link{display:none}
+      .stage-controls{bottom:2.15rem}
+      .stage-copy{max-width:67vw}
+      .orbit{gap:.16rem}
+      .orbit button{min-width:2rem;min-height:2.3rem}
+      .help{line-height:1.28;font-size:.78rem}
+      .chapter-nav button{min-height:2.6rem}
+      .story-lead{grid-template-columns:1fr}
+      .specs{grid-template-columns:repeat(2,1fr)}
+      .specs div:nth-child(n+3){border-top:1px solid var(--line)}
+    }
+    @media(max-aspect-ratio:1/1){
+      .poster{object-fit:contain}
+      .signature{top:calc(50% + 14.5vw);right:18%;font-size:clamp(2.9rem,13vw,6.15rem)}
+      .chapter-nav{top:auto;bottom:10rem;left:var(--margin);right:auto;display:flex;gap:.9rem}
+      .chapter-nav button::after{width:.65rem}
+      .chapter-nav button[aria-current="step"]::after{width:1.25rem}
+    }
+    @media(prefers-reduced-motion:reduce){.stage .header-right,.stage .stage-controls,.stage .chapter-nav,.stage .signature,.stage .frame,.chapter-nav button::after{transition:none}}
+  </style>
+</head>
+<body>
+<main class="sequence" id="presentation">
+<section class="stage" data-chapter="0" aria-label="Презентация Nissan 350Z">
+  <img class="poster" src="./cover.jpg" alt="Nissan 350Z под серебристым полотном">
+  <h1 class="wordmark">Nissan 350Z</h1>
+  <div class="surface" tabindex="0" role="button" aria-label="Снять полотно с Nissan 350Z"></div>
+  <div class="shade" aria-hidden="true"></div>
+  <div class="frame" aria-hidden="true"></div>
+  <p class="signature" lang="en" aria-hidden="true">Uncovered</p>
+  <header class="stage-header">
+    <a class="case-back" href="../index.html#350z">← К&nbsp;работам</a>
+    <div class="header-right">
+    <a class="history-link" href="#making-of">О&nbsp;проекте ↓</a>
+    <aside class="sound" aria-label="Звук">
+    <div class="sound-bar">
+      <button type="button" id="sound-toggle" aria-pressed="false">♫ Включить звук</button>
+      <button type="button" id="sound-options" aria-label="Настройки звука" aria-controls="sound-panel" aria-expanded="false">···</button>
+    </div>
+    <div class="sound-panel" id="sound-panel" hidden>
+      <p class="sound-title">Riders on the Storm · Fredwreck Remix</p>
+      <p id="sound-status" role="status">Локальная запись</p>
+      <div class="sound-links">
+        <a href="https://www.youtube.com/watch?v=kuI-wbTE5PU" target="_blank" rel="noopener noreferrer">Двигатель · Sound Library ↗</a>
+        <button type="button" id="sound-file-button">Свой файл</button>
+        <input type="file" id="sound-file" accept="audio/*,.mp3,.m4a,.ogg,.wav" hidden>
+      </div>
+    </div>
+    </aside>
+    </div>
+  </header>
+  <nav class="chapter-nav" aria-label="Ракурсы" hidden>
+    <button type="button" data-progress="0" aria-current="step" aria-label="Премьера">01</button>
+    <button type="button" data-progress=".49" aria-label="Линии кузова">02</button>
+    <button type="button" data-progress="1" aria-label="Вид сверху">03</button>
+  </nav>
+  <audio id="sound-track" preload="metadata" loop src="./audio/riders-on-the-storm.mp3"></audio>
+  <audio id="sound-engine" preload="auto" src="./audio/engine-start.wav"></audio>
+  <div class="stage-controls">
+    <div class="stage-copy">
+      <h2 id="car-name">Премьера</h2>
+      <p class="help" role="status">Загружаю 3D-модель</p>
+      <button type="button" class="reveal" data-reveal hidden>Снять полотно ↗</button>
+    </div>
+    <div class="controls" hidden>
+      <div class="orbit" role="group" aria-label="Поворот на 360 градусов">
+        <button type="button" data-turn="-1" aria-label="Повернуть влево">←</button>
+        <button type="button" data-home aria-label="Вернуть стартовый ракурс">360°</button>
+        <button type="button" data-turn="1" aria-label="Повернуть вправо">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<section class="story" id="making-of" aria-labelledby="making-of-title">
+  <div class="story-inner">
+    <div class="story-lead">
+      <h2 id="making-of-title">Как сделано</h2>
+      <div class="story-copy">
+        <p>Uncovered — интерактивная премьера машины Рэйчел Теллер из&nbsp;Need for Speed: Underground&nbsp;2. Клик запускает срыв полотна, зажигание и&nbsp;фары. Прокрутка меняет ракурс, а&nbsp;кузов можно повернуть самому.</p>
+        <p>Доработал исходную модель в&nbsp;Blender: переработал фары, стекло, материалы дисков и&nbsp;салона, добавил хромированные выхлопные насадки. Смоделировал полотно, поставил свет и&nbsp;нарисовал леттеринг 350Z для&nbsp;веб-сцены.</p>
+        <p class="case-credit">Исходная 3D-модель — <a href="https://sketchfab.com/3d-models/rachels-nissan-350z-nfs-underground-2-5b41f9a218624deaa1202efb6ff5a779" rel="noopener noreferrer" target="_blank">Ddiaz Design на&nbsp;Sketchfab</a>, бесплатная загрузка по&nbsp;лицензии CC BY-NC-SA. Личный некоммерческий проект для&nbsp;закрытого портфолио.</p>
+      </div>
+    </div>
+    <section class="car-history" id="history" aria-labelledby="history-title">
+      <div class="story-lead">
+        <h2 id="history-title">Снова&nbsp;Z</h2>
+        <div class="story-copy">
+          <p>В&nbsp;2002 году Nissan вернул серию Z: двухместное купе 350Z, или Z33, стало пятым поколением семейства. Под&nbsp;капотом — атмосферный V6 VQ35DE. Тяга идёт на&nbsp;задние колёса; одна из&nbsp;версий получила шестиступенчатую механику.</p>
+          <p>В&nbsp;2004-м у&nbsp;350Z появилась другая роль: зелёное купе Рэйчел Теллер с&nbsp;фиолетовым винилом стало одной из&nbsp;машин <i>Need for Speed: Underground 2</i>.</p>
+        </div>
+      </div>
+      <dl class="specs">
+        <div><dt>Двигатель</dt><dd>3,5 л · V6</dd></div>
+        <div><dt>Мощность</dt><dd>287&nbsp;hp</dd></div>
+        <div><dt>Крутящий момент</dt><dd>371&nbsp;Н·м</dd></div>
+        <div><dt>Привод</dt><dd>Задний</dd></div>
+      </dl>
+      <p class="source">Данные серийной 350Z 2003 модельного года для&nbsp;рынка США. <a href="https://usa.nissannews.com/en-US/releases/2003-350z-press-kit?origin=channel-2730">Пресс-кит Nissan</a>.</p>
+    </section>
+    <a class="case-return" href="../index.html#350z">← К&nbsp;работам</a>
+  </div>
+</section>
+</body>
+</html>
