@@ -33,9 +33,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .masthead-inner { position: relative; min-height: var(--masthead-height); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .masthead-inner::after { content: ""; position: absolute; inset: auto var(--gutter) 0; border-bottom: 1px solid var(--inverted-line); }
 .wordmark { font-size: clamp(1rem, 1.65vw, 1.65rem); letter-spacing: -.045em; white-space: nowrap; }
+.masthead-links { display: flex; align-items: center; gap: clamp(.75rem, 2vw, 2rem); }
 .masthead nav { display: flex; align-items: center; gap: clamp(1rem, 3.2vw, 3.2rem); font-size: clamp(.85rem, 1.35vw, 1.25rem); letter-spacing: -.025em; }
 .masthead nav a, .contact-foot a { display: inline-flex; gap: .35em; align-items: center; min-height: 2.75rem; }
 .masthead nav a:hover, .contact-foot a:hover { text-decoration: underline; text-underline-offset: .26em; }
+.language-switch {
+  display: inline-flex; flex: none; align-items: stretch;
+  border: 1px solid var(--inverted-line); border-radius: 999px;
+  font-size: .72rem; font-weight: 600; line-height: 1;
+}
+.language-switch > * {
+  display: grid; place-items: center;
+  min-width: 1.92rem; min-height: 2.1rem; padding-inline: .4rem;
+}
+.language-switch > :first-child { border-right: 1px solid var(--inverted-line); }
+.language-switch a { color: #b4b8c5; }
+.language-switch a:hover { color: var(--white); text-decoration: underline; text-underline-offset: .18em; }
+.language-switch a:focus-visible { outline-offset: -3px; border-radius: 999px; }
 .hero { position: relative; isolation: isolate; display: grid; min-height: calc(100svh - var(--masthead-height)); overflow: clip; }
 .hero > .wrap { display: grid; grid-template-rows: 1fr auto; }
 .hero-scene { position: relative; isolation: isolate; display: grid; grid-template-columns: .94fr 1.06fr; align-items: center; min-height: 29rem; padding-block: 4.5rem 3.5rem; }
@@ -252,6 +266,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 @media (max-width: 680px) {
+  .masthead-links { gap: .7rem; }
+  .language-switch > * { min-height: 2.75rem; min-width: 1.7rem; padding-inline: .36rem; }
   .masthead nav { gap: .85rem; }
   .masthead nav a:nth-child(2) { display: none; }
   .hero-scene { grid-template-columns: minmax(0,1fr); align-content: center; min-height: 0; padding-block: clamp(2.9rem,11vw,4.25rem) 1.1rem; gap: 2.5rem; }
@@ -287,8 +303,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .hero .primary { margin-top: 1.1rem; }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
+  .masthead-inner { gap: .5rem; }
+  .masthead-links { gap: .5rem; }
+  .wordmark { font-size: .9rem; }
   .masthead nav { gap: .5rem; }
+}
+
+@media (max-width: 370px) {
+  .masthead-inner { padding-inline: .9rem; }
+  .masthead-inner::after { inset-inline: .9rem; }
+  .masthead-inner, .masthead-links { gap: .4rem; }
+  .wordmark { font-size: .85rem; }
+  .masthead nav { gap: .4rem; font-size: .78rem; }
+  .masthead nav .icon { display: none; }
+  .language-switch > * { min-width: 1.5rem; padding-inline: .28rem; }
+}
+
+@media (max-width: 360px) {
   .hero h1 { font-size: 4.2rem; }
   .hero-foot { font-size: .7rem; }
   .feature-heading h3 { font-size: 1.7rem; }

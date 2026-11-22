@@ -21,6 +21,7 @@ document.addEventListener('click', (event) => {
     event.preventDefault();
     internalNavigation = true;
     history.pushState({ portfolioCase: true }, '', link.hash);
+    syncLanguageLink();
     openCase(link.hash, link);
   }
 
@@ -47,6 +48,7 @@ dialog.addEventListener('close', () => {
     } else {
       const project = document.getElementById(caseHash.replace('#case-', ''));
       history.replaceState(null, '', '#' + project.id);
+      syncLanguageLink();
       project.scrollIntoView({ behavior: 'instant' });
     }
   }
@@ -65,6 +67,17 @@ function syncCase() {
 
 addEventListener('hashchange', syncCase);
 syncCase();
+
+const languageLink = document.querySelector('[data-language-switch]');
+const languagePage = new URL(languageLink.href);
+
+function syncLanguageLink() {
+  languagePage.hash = location.hash;
+  languageLink.href = languagePage.href;
+}
+
+addEventListener('hashchange', syncLanguageLink);
+syncLanguageLink();
 
 const hero = document.querySelector('.hero');
 const scene = document.querySelector('.hero-scene');
@@ -147,7 +160,10 @@ function syncMotion() {
 pauseLight.addEventListener('click', () => {
   paused = !paused;
   pauseLight.setAttribute('aria-pressed', String(paused));
-  pauseLight.title = paused ? 'Продолжить анимацию фона' : 'Приостановить анимацию фона';
+  const [pause, resume] = document.documentElement.lang === 'en'
+    ? ['Pause background animation', 'Resume background animation']
+    : ['Приостановить анимацию фона', 'Продолжить анимацию фона'];
+  pauseLight.title = paused ? resume : pause;
   lastDraw = 0;
   queueFrame();
 });
