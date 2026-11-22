@@ -191,6 +191,7 @@ function lights(scene) {
   return {
     key,
     reveal(amount) {
+      key.shadow.intensity = .72 * amount;
       front.intensity = .39 + .33 * amount;
       rim.intensity = .20 + .36 * amount;
       ambient.intensity = .26 - .09 * amount;
@@ -384,7 +385,7 @@ const compositeFragment = `
   varying vec2 uvScreen;
   uniform sampler2D base, tuned, ink;
   uniform vec2 size, center;
-  uniform float brush, flow, time;
+  uniform float brush, flow, time, previewOpacity;
   void main() {
     vec2 uv = uvScreen, pixel = uv * size;
     float alpha = 0.;
@@ -401,7 +402,7 @@ const compositeFragment = `
       alpha = smoothstep(-2.0, 2.0, outline - length(p));
     }
     vec3 color = texture2D(base, uv).rgb;
-    if (alpha > 0.) color = mix(color, texture2D(tuned, uv - bend).rgb, alpha);
+    if (alpha > 0.) color = mix(color, texture2D(tuned, uv - bend * previewOpacity).rgb, alpha * previewOpacity);
     gl_FragColor = vec4(color, 1.);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -426,7 +427,7 @@ function makeLiquid(renderer) {
     uniforms: {
       base: { value: base.texture }, tuned: { value: tuned.texture }, ink: { value: null },
       size: { value: screenSize }, center: { value: new THREE.Vector2() }, brush: { value: 0 },
-      time: { value: 0 }, flow: { value: 0 },
+      time: { value: 0 }, flow: { value: 0 }, previewOpacity: { value: 0 },
     },
   });
   const target = () => new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false });
@@ -500,9 +501,10 @@ function makeLiquid(renderer) {
     pass(3, fields[0]);
     renderer.setRenderTarget(null);
   }
-  function draw(visible, center, brush, time) {
+  function draw(previewOpacity, center, brush, time) {
     const u = post.uniforms;
-    u.flow.value = visible && floating ? 1 : 0;
+    u.flow.value = previewOpacity > 0 && floating ? 1 : 0;
+    u.previewOpacity.value = previewOpacity;
     u.ink.value = fields[0]?.texture ?? base.texture;
     u.center.value.copy(center);
     u.brush.value = brush;
@@ -886,7 +888,8 @@ async function start() {
       sequence.setAttribute('data-started', '');
     }
     preview(null);
-    resetInk();
+    // Let the hover effect fade while the physical cover starts to move.
+    if (covered || reducedMotion.matches) resetInk();
     cover.reset();
     updateControls();
     if (ignitionAt === null) {
@@ -996,20 +999,21 @@ async function start() {
     if (animateWall && Number.isFinite(lastDraw)) {
       wall.material.uniforms.time.value += Math.min((now - lastDraw) / 1000, .12);
     }
-    const previewing = animateWall && covered && now <= flowUntil;
+    const hasInk = animateWall && flowUntil > 0;
+    const previewOpacity = hasInk && covered && now <= flowUntil ? 1
+      : hasInk && tearing ? 1 - THREE.MathUtils.smoothstep(sinceIgnition, .08, .4) : 0;
+    if (hasInk && !covered && previewOpacity === 0) resetInk();
     cover.mesh.visible = covered || tearing;
-    car.scene.visible = !covered;
+    // The car stays in the scene. The opaque fabric determines which parts are visible.
     renderer.setRenderTarget(liquid.base);
     renderer.render(scene, camera);
-    if (previewing) {
+    if (previewOpacity > 0) {
       cover.mesh.visible = false;
-      car.scene.visible = true;
       renderer.setRenderTarget(liquid.tuned);
       renderer.render(scene, camera);
-      cover.mesh.visible = true;
-      car.scene.visible = false;
+      cover.mesh.visible = covered || tearing;
     }
-    liquid.draw(previewing, flowCenter, previewing ? fallbackBrush : 0, time);
+    liquid.draw(previewOpacity, flowCenter, previewOpacity > 0 ? fallbackBrush : 0, time);
     lastDraw = now;
     if (move || animateWall || starting || tearing) requestFrame();
   }

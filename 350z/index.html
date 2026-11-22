@@ -39,6 +39,12 @@
     .stage-header a:hover,.chapter-nav button:hover{color:white}
     .case-back{font-size:.84rem;font-weight:650}
     .header-right{display:flex;align-items:center;gap:clamp(.7rem,2.3vw,2.5rem)}
+    .stage-header-actions,.case-language{display:flex;align-items:center}
+    .stage-header-actions{justify-content:flex-end;gap:clamp(.5rem,2vw,1.5rem)}
+    .case-language{border:1px solid var(--line);border-radius:100px;font-size:.7rem;font-weight:650;color:#c5c1b9;white-space:nowrap}
+    .stage-header .case-language a,.case-language span{display:grid;place-items:center;min-width:2.75rem;min-height:2.75rem;padding:0}
+    .case-language > :last-child{border-left:1px solid var(--line)}
+    .case-language [aria-current]{color:var(--cream)}
     h1,h2,p{margin:0}
     .wordmark{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none}
     .signature{
@@ -91,6 +97,7 @@
     .source{margin-top:1rem;line-height:1.5}
     @media(max-width:700px){
       .stage-header{top:1.05rem}
+      .stage-header .header-right{position:absolute;top:100%;right:0}
       .stage-header .history-link{display:none}
       .stage-controls{bottom:2.15rem}
       .stage-copy{max-width:67vw}
@@ -123,23 +130,29 @@
   <p class="signature" lang="en" aria-hidden="true">Uncovered</p>
   <header class="stage-header">
     <a class="case-back" href="../index.html#350z">← К&nbsp;работам</a>
-    <div class="header-right">
-    <a class="history-link" href="#making-of">О&nbsp;проекте ↓</a>
-    <aside class="sound" aria-label="Звук">
-    <div class="sound-bar">
-      <button type="button" id="sound-toggle" aria-pressed="false">♫ Включить звук</button>
-      <button type="button" id="sound-options" aria-label="Настройки звука" aria-controls="sound-panel" aria-expanded="false">···</button>
-    </div>
-    <div class="sound-panel" id="sound-panel" hidden>
-      <p class="sound-title">Riders on the Storm · Fredwreck Remix</p>
-      <p id="sound-status" role="status">Локальная запись</p>
-      <div class="sound-links">
-        <a href="https://www.youtube.com/watch?v=kuI-wbTE5PU" target="_blank" rel="noopener noreferrer">Двигатель · Sound Library ↗</a>
-        <button type="button" id="sound-file-button">Свой файл</button>
-        <input type="file" id="sound-file" accept="audio/*,.mp3,.m4a,.ogg,.wav" hidden>
+    <div class="stage-header-actions">
+      <div class="header-right">
+        <a class="history-link" href="#making-of">О&nbsp;проекте ↓</a>
+        <aside class="sound" aria-label="Звук">
+          <div class="sound-bar">
+            <button type="button" id="sound-toggle" aria-pressed="false">♫ Включить звук</button>
+            <button type="button" id="sound-options" aria-label="Настройки звука" aria-controls="sound-panel" aria-expanded="false">···</button>
+          </div>
+          <div class="sound-panel" id="sound-panel" hidden>
+            <p class="sound-title">Riders on the Storm · Fredwreck Remix</p>
+            <p id="sound-status" role="status">Локальная запись</p>
+            <div class="sound-links">
+              <a href="https://www.youtube.com/watch?v=kuI-wbTE5PU" target="_blank" rel="noopener noreferrer">Двигатель · Sound Library ↗</a>
+              <button type="button" id="sound-file-button">Свой файл</button>
+              <input type="file" id="sound-file" accept="audio/*,.mp3,.m4a,.ogg,.wav" hidden>
+            </div>
+          </div>
+        </aside>
       </div>
-    </div>
-    </aside>
+      <nav class="case-language" aria-label="Язык">
+        <span lang="ru" aria-current="page">RU</span>
+        <a href="../en/350z/index.html" hreflang="en" lang="en" aria-label="English">EN</a>
+      </nav>
     </div>
   </header>
   <nav class="chapter-nav" aria-label="Ракурсы" hidden>
