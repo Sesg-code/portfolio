@@ -129,6 +129,44 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .extra-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-block: 1rem 1.45rem; }
 .extra-heading h3 { font-size: clamp(1.65rem,3.2vw,3.25rem); letter-spacing: -.052em; }
 .extra-heading > span { color: var(--quiet); font-size: clamp(.8rem,1.15vw,1rem); }
+.presentations { margin-top: clamp(2.4rem, 5.5vw, 5.25rem); border-top: 1px solid var(--line); }
+.presentation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.35rem, 2.7vw, 2.6rem);
+}
+.presentation-card { min-width: 0; }
+.presentation-card .project-art {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+}
+.presentation-card .project-art img { object-fit: contain; }
+.presentation-card a:hover img,
+.presentation-card a:focus-visible img { transform: scale(1.035); }
+.presentation-name {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .6rem;
+  margin-top: .8rem;
+  font-size: clamp(1.2rem, 2.25vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -.04em;
+}
+.presentation-name .icon { width: 1.1rem; height: 1.1rem; }
+.presentation-meta { margin-top: .32rem; color: var(--quiet); }
+.presentation-download { margin-top: 1rem; }
+.contact-archive { justify-self: start; margin-top: .3rem; }
+@media (max-width: 1024px) {
+  .presentation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .presentation-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .presentation-card a:hover img,
+  .presentation-card a:focus-visible img { transform: none; }
+}
 .work-archive { margin-top: clamp(1.75rem,4vw,3.5rem); scroll-margin-top: 5rem; }
 .archive-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .65rem; }
 .archive-heading h4 { font-size: 1rem; font-weight: 600; }
