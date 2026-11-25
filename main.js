@@ -1,17 +1,29 @@
 const dialog = document.querySelector('.case-dialog');
 const dialogContent = dialog.querySelector('.dialog-content');
+const analyticsScript = document.querySelector('script[data-goatcounter]');
 let returnFocus;
 let caseHash;
 let internalNavigation = false;
 
+function trackCaseOpen(path, title) {
+  const count = () => window.goatcounter?.count?.({ path, title, event: true });
+  if (window.goatcounter?.count) {
+    count();
+  } else {
+    analyticsScript?.addEventListener('load', count, { once: true });
+  }
+}
+
 function openCase(hash, trigger) {
   const template = document.getElementById(hash.slice(1));
   if (!(template instanceof HTMLTemplateElement) || !hash.startsWith('#case-')) return;
+  const firstOpen = !dialog.open || caseHash !== hash;
   dialogContent.replaceChildren(template.content.cloneNode(true));
   returnFocus = trigger;
   caseHash = hash;
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
+  if (firstOpen) trackCaseOpen(template.id, dialogContent.querySelector('#case-title')?.textContent.trim());
 }
 
 document.addEventListener('click', (event) => {
